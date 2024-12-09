@@ -68,4 +68,60 @@ describe('TODOMvc App', () => {
       .children()
       .should('have.length', 2);
   });
+  it('Marca uma tarefa como concluída', () => {
+    cy.visit('');
+
+    cy.get('[data-cy=todo-input]')
+      .type('Terminar TP2 de ES{enter}');
+
+    cy.get('[data-cy=todos-list] > li [data-cy=toggle-todo-checkbox]')
+      .click();
+
+    cy.get('[data-cy=todos-list] > li')
+      .should('have.class', 'completed');
+  });
+  it('Edita uma tarefa existente', () => {
+    cy.visit('');
+  
+
+    cy.get('.new-todo')
+      .type('Tarefa para editar{enter}');
+  
+
+    cy.get('.todo-list li')
+      .should('have.length', 1)
+      .and('contain.text', 'Tarefa para editar');
+  
+
+    cy.get('.todo-list li label')
+      .dblclick();
+  
+
+    cy.get('.todo-list li.editing .edit')
+      .clear()
+      .type('Tarefa editada com sucesso{enter}');
+  
+
+    cy.get('.todo-list li')
+      .should('not.have.class', 'editing')
+      .and('contain.text', 'Tarefa editada com sucesso');
+  });
+  it('Remove uma tarefa existente', () => {
+    cy.visit('');
+  
+    cy.get('.new-todo')
+      .type('Tarefa para remover{enter}');
+  
+    cy.get('.todo-list li')
+      .should('have.length', 1)
+      .and('contain.text', 'Tarefa para remover');
+  
+    cy.get('.todo-list li .destroy')
+      .invoke('show') 
+      .click();
+  
+    cy.get('.todo-list li')
+      .should('have.length', 0);
+  });
+  
 });
